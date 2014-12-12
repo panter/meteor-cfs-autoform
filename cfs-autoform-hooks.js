@@ -110,15 +110,15 @@ var beforeHook = function (docOrModifier, template, docId) {
 
     // Get schema key that this input is for
     var key = elem.attr("data-schema-key");
-
+    var value = elem.val()
+    console.log(value);
     // Get the FS.Collection instance
     var fsCollectionName = elem.attr("data-cfs-collection");
     var fsCollection = FS._collections[fsCollectionName];
 
-    // delete old files assigned to this field
-    if(isUpdate)
+    var deleteOldFiles = function()
     {
-      // get the form's collection
+       // get the form's collection
       var formCollection = self.template.data.collection;
       if(_.isString(formCollection))
       {
@@ -137,6 +137,7 @@ var beforeHook = function (docOrModifier, template, docId) {
           // delete the old files
           if(isUpdate)
           {
+            
             _.each(oldFiles, function(id){
               fsCollection.remove(id);
             });
@@ -146,6 +147,7 @@ var beforeHook = function (docOrModifier, template, docId) {
         }
       }
     }
+   
     // Loop through all files that were attached to this field
     function loopFileList(fileList) {
       _.each(fileList, function (file) {
@@ -177,9 +179,22 @@ var beforeHook = function (docOrModifier, template, docId) {
     }
 
     // single fields first
-    loopFileList(elem.data("cfsaf_files"));
+    var fileList = elem.data("cfsaf_files");
+    if(_.size(fileList) >0)
+    {
+      if(isUpdate)
+        deleteOldFiles()
+      loopFileList(fileList);
+    }
     // then multiple fields
-    _.each(elem.data("cfsaf_files_multi"), function (fileList) {
+    fileList = elem.data("cfsaf_files_multi");
+    if(_.size(fileList) >0)
+    {
+      if(isUpdate)
+        deleteOldFiles()
+      loopFileList(fileList);
+    }
+    _.each(fileList, function (fileList) {
       loopFileList(fileList);
     });
   });
@@ -188,8 +203,6 @@ var beforeHook = function (docOrModifier, template, docId) {
 Hooks = {
 
   beforeUpdate: function(docId, modifier, template) {
-
-
     return beforeHook.call(this, modifier, template, docId);
   },
 
