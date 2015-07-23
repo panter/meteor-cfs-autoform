@@ -1,11 +1,9 @@
 Util = {
   //delete prop from obj
   //prop can be something like "obj.3.badprop
-  // CHANGE: nested properties with dot are still strings, no need to dive into
+  //CHANGE: nested properties with dot are still strings, no need to dive into
   deepDelete: function(obj, prop){
-
     delete obj[prop];
-
   },
   set: function(obj, prop, value) {
     obj[prop] = value;
@@ -16,7 +14,7 @@ Util = {
     });
   },
   //returns the object that CONTAINS the last property
-  deepFind: function(obj, prop){
+  deepFind: function(obj, path){
     path = path.split('.');
     for (i = 0; i < path.length - 1; i++)
       obj = obj[path[i]];
