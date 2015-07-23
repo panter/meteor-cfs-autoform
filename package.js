@@ -1,10 +1,12 @@
 Package.describe({
-  name: "panter:cfs-autoform",
+  name: "cfs:autoform",
   version: "2.2.1",
 
   summary: "Upload files as part of autoform submission",
-  git: "https://github.com/panter/meteor-cfs-autoform.git"
+  git: "https://github.com/aldeed/meteor-cfs-autoform.git"
 });
+
+
 
 Package.onUse(function(api) {
   api.use('underscore@1.0.1', 'client');
