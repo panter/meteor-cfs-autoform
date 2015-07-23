@@ -4,7 +4,7 @@ var beforeHook = function (docOrModifier, template, docId) {
     var isUpdate = true;
     // Util.deepFind uses a path to find if the key is set
     // In the update-case, the key is nested in the $set-object
-    // we therefore introduce a helperVariable: 
+    // we therefore introduce a helperVariable:
     var docData = docOrModifier['$set'];
   }
   else
@@ -16,7 +16,7 @@ var beforeHook = function (docOrModifier, template, docId) {
   if (!AutoForm.validateForm(this.formId)) {
     return false;
   }
-       
+
 
   // Loop through all hidden file inputs in the form.
   var totalFiles = 0;
@@ -30,7 +30,7 @@ var beforeHook = function (docOrModifier, template, docId) {
     // no matter what, we want to delete the dummyId value
     //delete docData[key];
     CfsAutoForm.Util.deepDelete(docData,key);
- 
+
     // Get list of files that were attached for this key
     var fileList = elem.data("cfsaf_files");
 
@@ -82,7 +82,10 @@ var beforeHook = function (docOrModifier, template, docId) {
         CfsAutoForm.Util.deepFind(docData,key).push(fileObj._id);
       } else {
         //docOrModifier[key] = fileObj._id;
-        CfsAutoForm.Util.deepSet(docData,key,fileObj._id);
+        if(isUpdate)
+          CfsAutoForm.Util.set(docData,key,fileObj._id);
+        else
+          CfsAutoForm.Util.deepSet(docData,key,fileObj._id);
       }
     }
 
@@ -137,7 +140,7 @@ var beforeHook = function (docOrModifier, template, docId) {
           // delete the old files
           if(isUpdate)
           {
-            
+
             _.each(oldFiles, function(id){
               fsCollection.remove(id);
             });
@@ -147,7 +150,7 @@ var beforeHook = function (docOrModifier, template, docId) {
         }
       }
     }
-   
+
     // Loop through all files that were attached to this field
     function loopFileList(fileList) {
       _.each(fileList, function (file) {
@@ -211,7 +214,7 @@ Hooks = {
     return Hooks.afterInsert.call(this, error, result, template);
   },
 
-  
+
   beforeInsert: function(doc, template)
   {
    return beforeHook.call(this, doc, template, null);

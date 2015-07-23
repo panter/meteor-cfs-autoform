@@ -3,12 +3,17 @@ Util = {
   //prop can be something like "obj.3.badprop
   // CHANGE: nested properties with dot are still strings, no need to dive into
   deepDelete: function(obj, prop){
-    
+
     delete obj[prop];
-    
+
+  },
+  set: function(obj, prop, value) {
+    obj[prop] = value;
   },
   deepSet: function(obj, prop, value){
-    obj[prop] = value;
+    return CfsAutoForm.Util.deepDo(obj, prop, function(obj, prop){
+      obj[prop] = value;
+    });
   },
   //returns the object that CONTAINS the last property
   deepFind: function(obj, prop){
@@ -23,7 +28,7 @@ Util = {
     path = path.split('.');
     for (i = 0; i < path.length - 1; i++)
       obj = obj[path[i]];
-    
+
     closure.apply(this, [obj, path[i]]);
   }
 };
